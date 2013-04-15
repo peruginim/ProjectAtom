@@ -1,0 +1,31 @@
+﻿Started drawing to the screen. Made a grid of circles.
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   Atoms/bin/Atoms.apk
+#	modified:   Atoms/bin/classes.dex
+#	modified:   Atoms/bin/classes/cs252/lab6/atoms/Game.class
+#	modified:   Atoms/bin/classes/cs252/lab6/atoms/R$layout.class
+#	modified:   Atoms/bin/classes/cs252/lab6/atoms/R$string.class
+#	modified:   Atoms/bin/classes/cs252/lab6/atoms/R$style.class
+#	modified:   Atoms/bin/classes/cs252/lab6/atoms/R$styleable.class
+#	modified:   Atoms/bin/classes/cs252/lab6/atoms/R.class
+#	modified:   Atoms/bin/resources.ap_
+#	modified:   Atoms/gen/cs252/lab6/atoms/R.java
+#	modified:   Atoms/res/layout/activity_game.xml
+#	modified:   Atoms/src/cs252/lab6/atoms/Game.java
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	Atoms/bin/classes/cs252/lab6/atoms/Atom.class
+#	Atoms/bin/classes/cs252/lab6/atoms/GameSurface.class
+#	Atoms/bin/classes/cs252/lab6/atoms/GameThread.class
+#	Atoms/bin/classes/cs252/lab6/atoms/R$id.class
+#	Atoms/src/cs252/lab6/atoms/Atom.java
+#	Atoms/src/cs252/lab6/atoms/GameSurface.java
+#	Atoms/src/cs252/lab6/atoms/GameThread.java
+
