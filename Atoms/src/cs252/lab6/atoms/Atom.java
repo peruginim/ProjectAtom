@@ -4,21 +4,16 @@ import android.graphics.Color;
 
 public class Atom
 {
-	private int color;
-	private int backColor;
-	private int num;
+	private Player player;
+	public int num;
 	private double[] elecs;
 	private int[] speeds;
 	private double nuc;
 	
 	public Atom(int rings)
 	{
-		color = Color.GRAY;
-		int red = Color.red(color);
-		int green = Color.green(color);
-		int blue = Color.blue(color);
-		backColor = Color.rgb(red - 50 > 0 ? red - 50 : 0, green - 50 > 0 ? green - 50 : 0, blue - 50 > 0 ? blue - 50 : 0);
-		num = rings;
+		player = new Player("null", Color.GRAY);
+		num = 0;
 		elecs = new double[rings];
 		speeds = new int[rings];
 		for(int i=0;i<rings;i++)
@@ -35,8 +30,12 @@ public class Atom
 			elecs[i] = (elecs[i] + (Math.PI / 180) * speeds[i]) % (2 * Math.PI);
 	}
 	
-	public int getColor() { return color; }
-	public int getBackColor() { return backColor; }
+	public void addElectron() { num++; }
+	public void setPlayer(Player player) { this.player = player; }
+	
+	public Player getPlayer() { return player; }
+	public int getColor() { return player.getColor(); }
+	public int getBackColor() { return player.getBackColor(); }
 	public int getNum() { return num; }
 	public int getRings() { return elecs.length; }
 	public double[] getElecs() { return elecs; }

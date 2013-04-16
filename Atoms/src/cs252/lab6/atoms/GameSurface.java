@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -13,7 +15,11 @@ public class GameSurface extends SurfaceView
 	private GameThread thread = null;
 	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private SurfaceHolder holder;
+	private int size;
+	private int yOffset;
+	private Player[] players;
 	private Atom[][] grid;
+	private int turn;
 	
 	public GameSurface(Context context)
 	{
@@ -32,6 +38,12 @@ public class GameSurface extends SurfaceView
 	
 	public void onResume()
 	{
+		players = new Player[4];
+		int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
+		
+		for(int i=0;i<4;i++)
+			players[i] = new Player("Player " + (i + 1), colors[i]);
+		
 		grid = new Atom[5][5];
 		
 		for(int i=0;i<5;i++)
@@ -45,6 +57,7 @@ public class GameSurface extends SurfaceView
 			}
 		}
 		
+		turn = 0;
 		holder = getHolder();
 		thread = new GameThread(this, 500);
 		thread.setRunning(true);
@@ -64,6 +77,21 @@ public class GameSurface extends SurfaceView
 			}
 			catch(InterruptedException e) { e.printStackTrace(); }
 		}
+	}
+	
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		int x = (int)(event.getX() / size);
+		int y = (int)((event.getY() - yOffset) / size);
+		
+		if(x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer().getName() == "null" || grid[x][y].getPlayer() == players[turn]))
+		{
+			grid[x][y].setPlayer(players[turn]);
+			grid[x][y].addElectron();
+			turn = (turn + 1) % players.length;
+		}
+		
+		return true;
 	}
 	
 	public void update()
@@ -136,10 +164,10 @@ public class GameSurface extends SurfaceView
 	
 	public void paint(Canvas canvas)
 	{
-		canvas.drawARGB(255, 0, 100, 255);
+		size = this.getWidth() / 5;
+		yOffset = (int)((this.getHeight() / 2) - (size * 2.5));
 		
-		int size = canvas.getWidth() / 5;
-		int yOffset = (int)((canvas.getHeight() / 2) - (size * 2.5));
+		canvas.drawARGB(255, 0, 100, 255);
 		
 		for(int i=0;i<5;i++)
 			for(int j=0;j<5;j++)
