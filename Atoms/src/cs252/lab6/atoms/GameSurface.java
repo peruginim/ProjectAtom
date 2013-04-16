@@ -2,10 +2,9 @@ package cs252.lab6.atoms;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -90,17 +89,57 @@ public class GameSurface extends SurfaceView
 	
 	public void updateStates() {}
 	
+	public void drawAtom(Canvas canvas, float x, float y, int size, Atom atom)
+	{
+		float nucSize = size / 4;
+		float neutSize = size / 6;
+		float proSize = size / 8;
+		float ringInc = size / 16;
+		float elecSize = size / 32;
+		
+		for(int i=0;i<atom.getRings();i++)
+		{
+			double pro = atom.getNuc() + i * ((2*Math.PI) / 3);
+			paint.setColor(atom.getBackColor());
+			paint.setStyle(Paint.Style.FILL);
+			canvas.drawCircle((float)(x + proSize * Math.cos(pro)), (float)(y + proSize * Math.sin(pro)), proSize, paint);
+			paint.setColor(Color.rgb(50, 50, 50));
+			paint.setStyle(Paint.Style.STROKE);
+			canvas.drawCircle((float)(x + proSize * Math.cos(pro)), (float)(y + proSize * Math.sin(pro)), proSize, paint);
+			paint.setColor(Color.WHITE);
+			canvas.drawCircle((float)x, (float)y, nucSize + ringInc * (i + 1), paint);
+		}
+		
+		paint.setColor(atom.getColor());
+		paint.setStyle(Paint.Style.FILL);
+		canvas.drawCircle(x, y, neutSize, paint);
+		paint.setColor(Color.rgb(50, 50, 50));
+		paint.setStyle(Paint.Style.STROKE);
+		canvas.drawCircle(x, y, neutSize, paint);
+		
+		int elecs = atom.getNum() < atom.getRings() ? atom.getNum() : atom.getRings();
+		for(int i=0;i<elecs;i++)
+		{
+			paint.setColor(atom.getColor());
+			paint.setStyle(Paint.Style.FILL);
+			canvas.drawCircle((float)(x + (nucSize + ringInc * i) * Math.cos(atom.getElecs()[i])), (float)(y + (nucSize + ringInc * i) * Math.sin(atom.getElecs()[i])), elecSize, paint);
+			paint.setColor(Color.rgb(50, 50, 50));
+			paint.setStyle(Paint.Style.STROKE);
+			canvas.drawCircle((float)(x + (nucSize + ringInc * i) * Math.cos(atom.getElecs()[i])), (float)(y + (nucSize + ringInc * i) * Math.sin(atom.getElecs()[i])), elecSize, paint);
+		}
+	}
+	
 	public void paint(Canvas canvas)
 	{
-		paint.setStyle(Paint.Style.FILL);
-		int size = 30;
+		canvas.drawARGB(255, 0, 100, 255);
+		
+		int size = canvas.getWidth() / 5;
 		
 		for(int i=0;i<5;i++)
 		{
 			for(int j=0;j<5;j++)
 			{
-				paint.setColor(grid[i][j].getColor());
-				canvas.drawOval(new RectF(i * size, j * size, i * size + size, j * size + size), paint);
+				drawAtom(canvas, (float)((i + 0.5) * size), (float)((j + 0.5) * size), size, grid[i][j]);
 			}
 		}
 	}
