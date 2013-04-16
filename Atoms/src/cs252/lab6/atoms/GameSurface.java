@@ -10,9 +10,9 @@ import android.view.SurfaceView;
 
 public class GameSurface extends SurfaceView
 {
-	private SurfaceHolder holder;
 	private GameThread thread = null;
 	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private SurfaceHolder holder;
 	private Atom[][] grid;
 	
 	public GameSurface(Context context)
@@ -87,7 +87,12 @@ public class GameSurface extends SurfaceView
 		}
 	}
 	
-	public void updateStates() {}
+	public void updateStates()
+	{
+		for(int i=0;i<5;i++)
+			for(int j=0;j<5;j++)
+				grid[i][j].moveElectrons();
+	}
 	
 	public void drawAtom(Canvas canvas, float x, float y, int size, Atom atom)
 	{
@@ -122,10 +127,10 @@ public class GameSurface extends SurfaceView
 		{
 			paint.setColor(atom.getColor());
 			paint.setStyle(Paint.Style.FILL);
-			canvas.drawCircle((float)(x + (nucSize + ringInc * i) * Math.cos(atom.getElecs()[i])), (float)(y + (nucSize + ringInc * i) * Math.sin(atom.getElecs()[i])), elecSize, paint);
+			canvas.drawCircle((float)(x + (nucSize + ringInc * (i + 1)) * Math.cos(atom.getElecs()[i])), (float)(y + (nucSize + ringInc * (i + 1)) * Math.sin(atom.getElecs()[i])), elecSize, paint);
 			paint.setColor(Color.rgb(50, 50, 50));
 			paint.setStyle(Paint.Style.STROKE);
-			canvas.drawCircle((float)(x + (nucSize + ringInc * i) * Math.cos(atom.getElecs()[i])), (float)(y + (nucSize + ringInc * i) * Math.sin(atom.getElecs()[i])), elecSize, paint);
+			canvas.drawCircle((float)(x + (nucSize + ringInc * (i + 1)) * Math.cos(atom.getElecs()[i])), (float)(y + (nucSize + ringInc * (i + 1)) * Math.sin(atom.getElecs()[i])), elecSize, paint);
 		}
 	}
 	
@@ -134,13 +139,10 @@ public class GameSurface extends SurfaceView
 		canvas.drawARGB(255, 0, 100, 255);
 		
 		int size = canvas.getWidth() / 5;
+		int yOffset = (int)((canvas.getHeight() / 2) - (size * 2.5));
 		
 		for(int i=0;i<5;i++)
-		{
 			for(int j=0;j<5;j++)
-			{
-				drawAtom(canvas, (float)((i + 0.5) * size), (float)((j + 0.5) * size), size, grid[i][j]);
-			}
-		}
+				drawAtom(canvas, (float)((i + 0.5) * size), (float)(yOffset + (j + 0.5) * size), size, grid[i][j]);
 	}
 }
