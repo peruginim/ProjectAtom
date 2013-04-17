@@ -1,18 +1,19 @@
 package cs252.lab6.atoms;
 
 import android.graphics.Color;
+import android.graphics.Point;
 
 public class Atom
 {
 	private Player player;
-	public int num;
+	private int num;
 	private double[] elecs;
 	private int[] speeds;
 	private double nuc;
 	
 	public Atom(int rings)
 	{
-		player = new Player("null", Color.GRAY);
+		player = new Player("null", Color.GRAY, true);
 		num = 0;
 		elecs = new double[rings];
 		speeds = new int[rings];
@@ -31,6 +32,7 @@ public class Atom
 	}
 	
 	public void addElectron() { num++; }
+	public void sendOutElectrons() { num -= elecs.length + 1; }
 	public void setPlayer(Player player) { this.player = player; }
 	
 	public Player getPlayer() { return player; }
@@ -40,4 +42,5 @@ public class Atom
 	public int getRings() { return elecs.length; }
 	public double[] getElecs() { return elecs; }
 	public double getNuc() { return nuc; }
+	public int getOutermostElec() { return num + 1 < elecs.length ? num : elecs.length; }
 }

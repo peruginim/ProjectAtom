@@ -7,11 +7,13 @@ public class Player
 	private String name;
 	private int color;
 	private int backColor;
+	private boolean bot;
 	
-	public Player(String name, int color)
+	public Player(String name, int color, boolean bot)
 	{
 		this.name = name;
 		this.color = color;
+		this.bot = bot;
 		int red = Color.red(color);
 		int green = Color.green(color);
 		int blue = Color.blue(color);
@@ -21,4 +23,5 @@ public class Player
 	public String getName() { return name; }
 	public int getColor() { return color; }
 	public int getBackColor() { return backColor; }
+	public boolean isBot() { return bot; }
 }
