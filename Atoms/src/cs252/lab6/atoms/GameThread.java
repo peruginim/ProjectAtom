@@ -8,7 +8,7 @@ public class GameThread extends Thread
 	
 	public GameThread(GameSurface surface, long sleepTime)
 	{
-		super();
+		//super();
 		this.surface = surface;
 		this.sleepTime = sleepTime;
 	}

@@ -28,6 +28,8 @@ public class GameSurface extends SurfaceView
 	private boolean gameOver;
 	private boolean doubleClickPrevention;
 	
+	public static final int TIMER_TICK = 2;
+	
 	public GameSurface(Context context)
 	{
 		super(context);
@@ -70,7 +72,7 @@ public class GameSurface extends SurfaceView
 		gameOver = false;
 		doubleClickPrevention = true;
 		holder = getHolder();
-		thread = new GameThread(this, 500);
+		thread = new GameThread(this, TIMER_TICK);
 		thread.setRunning(true);
 		thread.start();
 	}
@@ -191,6 +193,10 @@ public class GameSurface extends SurfaceView
 				updateStates();
 				paint(canvas);
 			}
+		}
+		catch(Exception e)
+		{
+			//DO NOTHING....
 		}
 		finally
 		{
