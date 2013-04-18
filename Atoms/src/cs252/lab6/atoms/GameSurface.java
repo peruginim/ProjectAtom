@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -26,7 +27,6 @@ public class GameSurface extends SurfaceView
 	private int turn;
 	private boolean exploding;
 	private boolean gameOver;
-	private boolean doubleClickPrevention;
 	
 	public static final int TIMER_TICK = 2;
 	
@@ -70,9 +70,8 @@ public class GameSurface extends SurfaceView
 		turn = 0;
 		exploding = false;
 		gameOver = false;
-		doubleClickPrevention = true;
 		holder = getHolder();
-		thread = new GameThread(this, TIMER_TICK);
+		thread = new GameThread(this, holder);
 		thread.setRunning(true);
 		thread.start();
 	}
@@ -119,6 +118,9 @@ public class GameSurface extends SurfaceView
 			if(y > 0) { sendStray(x, y, x, y-1); }
 			if(y < 4) { sendStray(x, y, x, y+1); }
 		}
+		
+		if(strays.size() == 0)
+			nextTurn();
 	}
 	
 	public void sendStray(int x, int y, int dx, int dy)
@@ -147,7 +149,6 @@ public class GameSurface extends SurfaceView
 				{
 					if(players[turn].isBot())
 						botTurn();
-					doubleClickPrevention = true;
 					return;
 				}
 		
@@ -166,43 +167,13 @@ public class GameSurface extends SurfaceView
 	
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		if(doubleClickPrevention)
-		{
-			int x = (int)(event.getX() / size);
-			int y = (int)((event.getY() - yOffset) / size);
-			
-			if(x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer().getName().equals("null") || grid[x][y].getPlayer() == players[turn]))
-				explode(x, y);
-			
-			doubleClickPrevention = false;
-		}
+		int x = (int)(event.getX() / size);
+		int y = (int)((event.getY() - yOffset) / size);
+		
+		if(x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer().getName().equals("null") || grid[x][y].getPlayer() == players[turn]))
+			explode(x, y);
 		
 		return true;
-	}
-	
-	public void update()
-	{
-		Canvas canvas = null;
-		
-		try
-		{
-			canvas = holder.lockCanvas();
-			
-			synchronized(holder)
-			{
-				updateStates();
-				paint(canvas);
-			}
-		}
-		catch(Exception e)
-		{
-			//DO NOTHING....
-		}
-		finally
-		{
-			if(canvas != null)
-				holder.unlockCanvasAndPost(canvas);
-		}
 	}
 	
 	public void updateStates()
@@ -234,12 +205,6 @@ public class GameSurface extends SurfaceView
 				elec[0].x += distX;
 				elec[0].y += distY;
 			}
-		}
-		
-		if(strays.size() == 0 && exploding && !gameOver)
-		{
-			Log.w("na", "next turn");
-			nextTurn();
 		}
 	}
 	
@@ -285,25 +250,40 @@ public class GameSurface extends SurfaceView
 	
 	public void paint(Canvas canvas)
 	{
-		float elecSize = size / 32;
-		
-		size = this.getWidth() / 5;
-		yOffset = (int)((this.getHeight() / 2) - (size * 2.5));
-		
-		canvas.drawARGB(255, 48, 74, 97);
-		
-		for(int i=0;i<5;i++)
-			for(int j=0;j<5;j++)
-				drawAtom(canvas, (float)((i + 0.5) * size), (float)(yOffset + (j + 0.5) * size), grid[i][j]);
-		
-		for(Point[] elec : strays)
+		try
 		{
+			float elecSize = size / 32;
+			
+			size = this.getWidth() / 5;
+			yOffset = (int)((this.getHeight() / 2) - (size * 2.5));
+			
+			canvas.drawARGB(255, 48, 74, 97);
+			
+			paint.setTextAlign(Paint.Align.CENTER);
+			paint.setTypeface(Typeface.SANS_SERIF);
+			paint.setStrokeWidth(0);
+			paint.setTextSize((float)(size / 1.5));
+			paint.setColor(Color.RED);
+			canvas.drawText("Atoms!", this.getWidth() / 2, yOffset / 2, paint);
+			paint.setTextSize(size / 3);
 			paint.setColor(players[turn].getColor());
-			paint.setStyle(Paint.Style.FILL);
-			canvas.drawCircle((float)elec[0].x, (float)elec[0].y, elecSize, paint);
-			paint.setColor(Color.rgb(50, 50, 50));
-			paint.setStyle(Paint.Style.STROKE);
-			canvas.drawCircle((float)elec[0].x, (float)elec[0].y, elecSize, paint);
+			canvas.drawText(players[turn].getName() + "'s turn!", this.getWidth() / 2, this.getHeight() - (yOffset / 2), paint);
+			paint.setStrokeWidth((float)1.5);
+			
+			for(int i=0;i<5;i++)
+				for(int j=0;j<5;j++)
+					drawAtom(canvas, (float)((i + 0.5) * size), (float)(yOffset + (j + 0.5) * size), grid[i][j]);
+			
+			for(Point[] elec : strays)
+			{
+				paint.setColor(players[turn].getColor());
+				paint.setStyle(Paint.Style.FILL);
+				canvas.drawCircle((float)elec[0].x, (float)elec[0].y, elecSize, paint);
+				paint.setColor(Color.rgb(50, 50, 50));
+				paint.setStyle(Paint.Style.STROKE);
+				canvas.drawCircle((float)elec[0].x, (float)elec[0].y, elecSize, paint);
+			}
 		}
+		catch(Exception e) {}
 	}
 }

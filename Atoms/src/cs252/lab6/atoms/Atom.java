@@ -20,7 +20,8 @@ public class Atom
 		for(int i=0;i<rings;i++)
 		{
 			elecs[i] = Math.random() * (2 * Math.PI);
-			speeds[i] = (int)(Math.random() * 4) + 1;
+			int reverse = (int)(Math.random()*2) == 0 ? -1 : 1;
+			speeds[i] = reverse * ((int)(Math.random() * 15) + 5);
 		}
 		nuc = Math.random() * (2 * Math.PI);
 	}

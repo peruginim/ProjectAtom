@@ -1,16 +1,21 @@
 package cs252.lab6.atoms;
 
+import android.graphics.Canvas;
+import android.util.Log;
+import android.view.SurfaceHolder;
+
 public class GameThread extends Thread
 {
 	private volatile boolean running = false;
 	private GameSurface surface;
-	private long sleepTime;
+	private SurfaceHolder surfaceHolder;
+	private final static int MAX_FPS = 60;
+	private final static int FRAME_PERIOD = 1000 / MAX_FPS;
 	
-	public GameThread(GameSurface surface, long sleepTime)
+	public GameThread(GameSurface surface, SurfaceHolder surfaceHolder)
 	{
-		//super();
 		this.surface = surface;
-		this.sleepTime = sleepTime;
+		this.surfaceHolder = surfaceHolder;
 	}
 	
 	public void setRunning(boolean running)
@@ -20,14 +25,41 @@ public class GameThread extends Thread
 	
 	public void run()
 	{
+		Canvas canvas;
+		long beginTime;
+		long timeDiff;
+		int sleepTime = 0;
+		
 		while (running)
 		{
+			canvas = null;
+			
 			try
 			{
-				sleep(sleepTime);
-				surface.update();
+				canvas = this.surfaceHolder.lockCanvas();
+				synchronized(surfaceHolder)
+				{
+					beginTime = System.currentTimeMillis();
+					this.surface.updateStates();
+					this.surface.paint(canvas);
+					timeDiff = System.currentTimeMillis() - beginTime;
+					sleepTime = (int)(FRAME_PERIOD - timeDiff);
+					
+					if(sleepTime > 0)
+					{
+						try
+						{
+							Thread.sleep(sleepTime);
+						}
+						catch(InterruptedException e) {}
+					}
+				}
 			}
-			catch(InterruptedException e) { e.printStackTrace(); }
+			finally
+			{
+				if(canvas != null)
+					surfaceHolder.unlockCanvasAndPost(canvas);
+			}
 		}
 	}
 }
