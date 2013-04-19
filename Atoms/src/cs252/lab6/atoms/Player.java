@@ -25,6 +25,25 @@ public class Player
 		games_played = 0;
 	}
 	
+	//Used for loading players from SQL DB
+	public Player(int player_id, String name, int bot, int color, int bg_color, int games_played, int games_won)
+	{
+		this.player_id = player_id;
+		this.name = name;
+		if(bot == 1)
+		{
+			this.bot = true;
+		}
+		else
+		{
+			this.bot = false;
+		}
+		this.color = color;
+		this.backColor = bg_color;
+		this.games_played = games_played;
+		this.games_won = games_won;
+	}
+	
 	public String getName() { return name; }
 	public int getColor() { return color; }
 	public int getBackColor() { return backColor; }
