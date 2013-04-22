@@ -27,7 +27,7 @@ public class Splash extends Activity{
 				catch(InterruptedException e){
 					e.printStackTrace();
 				}finally{
-					Intent openMain = new Intent("cs252.lab6.atoms.Game");
+					Intent openMain = new Intent("cs252.lab6.atoms.Menu");
 					startActivity(openMain);
 				}
 			}
