@@ -30,7 +30,6 @@ public class Menu extends ListActivity{
 			cheese = "Game";
 		}
 		if(cheese.equals("Exit")){
-			//finish();
 			android.os.Process.killProcess(android.os.Process.myPid());
 		}
 		
