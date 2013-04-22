@@ -37,6 +37,16 @@
             </intent-filter>
         </activity>
         
+        <activity
+            android:name="cs252.lab6.atoms.Menu"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="cs252.lab6.atoms.Menu" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
     </application>
 
 </manifest>
