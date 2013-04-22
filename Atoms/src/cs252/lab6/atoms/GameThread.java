@@ -9,7 +9,7 @@ public class GameThread extends Thread
 	private volatile boolean running = false;
 	private GameSurface surface;
 	private SurfaceHolder surfaceHolder;
-	private final static int MAX_FPS = 60;
+	private final static int MAX_FPS = 30;
 	private final static int FRAME_PERIOD = 1000 / MAX_FPS;
 	
 	public GameThread(GameSurface surface, SurfaceHolder surfaceHolder)

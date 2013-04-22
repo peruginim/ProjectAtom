@@ -1,7 +1,5 @@
 package cs252.lab6.atoms;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,7 +21,9 @@ public class GameSurface extends SurfaceView
 	private int yOffset;
 	private Player[] players;
 	private Atom[][] grid;
-	private ArrayList<Point[]> strays;
+	private Point[][] strays;
+	private int straysPos;
+	private int numStrays;
 	private int turn;
 	private boolean exploding;
 	private boolean gameOver;
@@ -66,7 +66,9 @@ public class GameSurface extends SurfaceView
 			}
 		}
 		
-		strays = new ArrayList<Point[]>();
+		strays = new Point[1024][];
+		straysPos = 0;
+		numStrays = 0;
 		turn = 0;
 		exploding = false;
 		gameOver = false;
@@ -113,13 +115,13 @@ public class GameSurface extends SurfaceView
 		if(grid[x][y].getRings() < grid[x][y].getNum())
 		{
 			grid[x][y].sendOutElectrons();
-			if(x > 0) { sendStray(x, y, x-1, y); }
-			if(x < 4) { sendStray(x, y, x+1, y); }
-			if(y > 0) { sendStray(x, y, x, y-1); }
-			if(y < 4) { sendStray(x, y, x, y+1); }
+			if(x > 0) sendStray(x, y, x-1, y);
+			if(x < 4) sendStray(x, y, x+1, y);
+			if(y > 0) sendStray(x, y, x, y-1);
+			if(y < 4) sendStray(x, y, x, y+1);
 		}
 		
-		if(strays.size() == 0)
+		if(numStrays == 0)
 			nextTurn();
 	}
 	
@@ -128,18 +130,18 @@ public class GameSurface extends SurfaceView
 		float nucSize = size / 4;
 		float ringInc = size / 16;
 		
-		int elec = grid[x][y].getRings() < grid[x][y].getNum() + 1 ? grid[x][y].getRings() : grid[x][y].getNum() + 1;
+		int elec = grid[x][y].getOutermostElec();
 		double electron = grid[x][y].getElecs()[elec];
 		Point[] points = new Point[2];
-		points[0].x = (int)((x - 0.5) * size + (nucSize + ringInc * elec) * Math.cos(electron));
-		points[0].y = (int)((y - 0.5) * size + (nucSize + ringInc * elec) * Math.sin(electron));
-		points[1].x = dx;
-		points[1].y = dy;
-		strays.add(points);
+		points[0] = new Point((int)((x + 0.5) * size + (nucSize + ringInc * elec) * Math.cos(electron)), (int)(((y + 0.5) * size + (nucSize + ringInc * elec) * Math.sin(electron)) + yOffset));
+		points[1] = new Point(dx, dy);
+		strays[straysPos++] = points;
+		numStrays++;
 	}
 	
 	public void nextTurn()
 	{
+		straysPos = 0;
 		exploding = false;
 		turn = (turn + 1) % players.length;
 		
@@ -170,40 +172,46 @@ public class GameSurface extends SurfaceView
 		int x = (int)(event.getX() / size);
 		int y = (int)((event.getY() - yOffset) / size);
 		
-		if(x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer().getName().equals("null") || grid[x][y].getPlayer() == players[turn]))
+		if(!gameOver && !exploding && x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer().getName().equals("null") || grid[x][y].getPlayer() == players[turn]))
 			explode(x, y);
 		
-		return true;
+		return false;
 	}
 	
 	public void updateStates()
 	{
 		float nucSize = size / 4;
 		float ringInc = size / 16;
-		float straySpeed = size / 100;
+		float straySpeed = size / 10;
 		
 		for(int i=0;i<5;i++)
 			for(int j=0;j<5;j++)
 				grid[i][j].moveElectrons();
 		
-		for(Point[] elec : strays)
+		for(int i=0;i<strays.length;i++)
 		{
-			int outermost = grid[elec[1].x][elec[1].y].getOutermostElec();
-			double electron = grid[elec[1].x][elec[1].y].getElecs()[outermost];
-			double dx = (elec[1].x - 0.5) * size + (nucSize + ringInc * outermost) * Math.cos(electron);
-			double dy = (elec[1].y - 0.5) * size + (nucSize + ringInc * outermost) * Math.sin(electron);
-			double theta = Math.atan2(dy - elec[0].y, dx - elec[0].x);
-			double distX = straySpeed * Math.cos(theta);
-			double distY = straySpeed * Math.sin(theta);
-			if(dx - elec[0].x < straySpeed && dy - elec[0].y < straySpeed)
+			if(strays[i] != null)
 			{
-				explode(elec[1].x, elec[1].y);
-				strays.remove(elec);
-			}
-			else
-			{
-				elec[0].x += distX;
-				elec[0].y += distY;
+				Point[] elec = strays[i];
+				int outermost = grid[elec[1].x][elec[1].y].getOutermostElec();
+				double electron = grid[elec[1].x][elec[1].y].getElecs()[outermost];
+				double dx = (elec[1].x + 0.5) * size + (nucSize + ringInc * outermost) * Math.cos(electron);
+				double dy = (elec[1].y + 0.5) * size + (nucSize + ringInc * outermost) * Math.sin(electron) + yOffset;
+				double theta = Math.atan2(dy - elec[0].y, dx - elec[0].x);
+				double distX = straySpeed * Math.cos(theta);
+				double distY = straySpeed * Math.sin(theta);
+				if(dx - elec[0].x < straySpeed && dy - elec[0].y < straySpeed)
+				{
+					explode(elec[1].x, elec[1].y);
+					strays[i] = null;
+					if(--numStrays == 0)
+						nextTurn();
+				}
+				else
+				{
+					elec[0].x += distX;
+					elec[0].y += distY;
+				}
 			}
 		}
 	}
@@ -267,21 +275,28 @@ public class GameSurface extends SurfaceView
 			canvas.drawText("Atoms!", this.getWidth() / 2, yOffset / 2, paint);
 			paint.setTextSize(size / 3);
 			paint.setColor(players[turn].getColor());
-			canvas.drawText(players[turn].getName() + "'s turn!", this.getWidth() / 2, this.getHeight() - (yOffset / 2), paint);
+			if(!gameOver)
+				canvas.drawText(players[turn].getName() + "'s turn", this.getWidth() / 2, this.getHeight() - (yOffset / 2), paint);
+			else
+				canvas.drawText(players[turn].getName() + " has won!", this.getWidth() / 2, this.getHeight() - (yOffset / 2), paint);
 			paint.setStrokeWidth((float)1.5);
 			
 			for(int i=0;i<5;i++)
 				for(int j=0;j<5;j++)
 					drawAtom(canvas, (float)((i + 0.5) * size), (float)(yOffset + (j + 0.5) * size), grid[i][j]);
 			
-			for(Point[] elec : strays)
+			for(int i=0;i<strays.length;i++)
 			{
-				paint.setColor(players[turn].getColor());
-				paint.setStyle(Paint.Style.FILL);
-				canvas.drawCircle((float)elec[0].x, (float)elec[0].y, elecSize, paint);
-				paint.setColor(Color.rgb(50, 50, 50));
-				paint.setStyle(Paint.Style.STROKE);
-				canvas.drawCircle((float)elec[0].x, (float)elec[0].y, elecSize, paint);
+				if(strays[i] != null)
+				{
+					Point[] elec = strays[i];
+					paint.setColor(players[turn].getColor());
+					paint.setStyle(Paint.Style.FILL);
+					canvas.drawCircle((float)elec[0].x, (float)elec[0].y, elecSize, paint);
+					paint.setColor(Color.rgb(50, 50, 50));
+					paint.setStyle(Paint.Style.STROKE);
+					canvas.drawCircle((float)elec[0].x, (float)elec[0].y, elecSize, paint);
+				}
 			}
 		}
 		catch(Exception e) {}

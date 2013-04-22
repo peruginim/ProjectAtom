@@ -21,14 +21,17 @@ public class Atom
 		{
 			elecs[i] = Math.random() * (2 * Math.PI);
 			int reverse = (int)(Math.random()*2) == 0 ? -1 : 1;
-			speeds[i] = reverse * ((int)(Math.random() * 15) + 5);
+			speeds[i] = reverse * ((int)(Math.random() * 8) + 3);
 		}
 		nuc = Math.random() * (2 * Math.PI);
 	}
 	
 	public void moveElectrons()
 	{
-		for(int i=0;i<elecs.length;i++)
+		int movingElecs = num;
+		if(num > elecs.length)
+			movingElecs = elecs.length;
+		for(int i=0;i<movingElecs;i++)
 			elecs[i] = (elecs[i] + (Math.PI / 180) * speeds[i]) % (2 * Math.PI);
 	}
 	
@@ -43,5 +46,5 @@ public class Atom
 	public int getRings() { return elecs.length; }
 	public double[] getElecs() { return elecs; }
 	public double getNuc() { return nuc; }
-	public int getOutermostElec() { return num + 1 < elecs.length ? num : elecs.length; }
+	public int getOutermostElec() { return num < elecs.length-1 ? num : elecs.length-1; }
 }

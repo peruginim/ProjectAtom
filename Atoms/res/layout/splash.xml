@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Brandon Vickery\nNiraj Venkat\nSam Dickson\nMike Perugini"
+        android:text="Brandon Vickrey\nNiraj Venkat\nSam Dickson\nMike Perugini"
         android:textSize="25dp" />
 
 </LinearLayout>
