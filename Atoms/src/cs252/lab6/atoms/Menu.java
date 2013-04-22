@@ -22,6 +22,7 @@ public class Menu extends ListActivity{
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		String cheese = classes[position];
+		
 		if(cheese.equals("Load Game")){
 			cheese = "LoadGame";
 		}
@@ -29,9 +30,10 @@ public class Menu extends ListActivity{
 			cheese = "Game";
 		}
 		if(cheese.equals("Exit")){
-			finish();
+			//finish();
 			android.os.Process.killProcess(android.os.Process.myPid());
 		}
+		
 		try {
 			Class room = Class.forName("cs252.lab6.atoms." + cheese);
 			Intent malicious = new Intent(Menu.this, room);
