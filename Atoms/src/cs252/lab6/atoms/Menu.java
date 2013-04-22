@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 public class Menu extends ListActivity{
 
-	String classes[] = {"Game", "Load Game", "Options", "About"};
+	String classes[] = {"New Game", "Load Game", "Options", "Instructions", "Exit"};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -24,6 +24,13 @@ public class Menu extends ListActivity{
 		String cheese = classes[position];
 		if(cheese.equals("Load Game")){
 			cheese = "LoadGame";
+		}
+		if(cheese.equals("New Game")){
+			cheese = "Game";
+		}
+		if(cheese.equals("Exit")){
+			finish();
+			android.os.Process.killProcess(android.os.Process.myPid());
 		}
 		try {
 			Class room = Class.forName("cs252.lab6.atoms." + cheese);
