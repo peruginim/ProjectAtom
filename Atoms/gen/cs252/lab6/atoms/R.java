@@ -30,6 +30,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int imageView1=0x7f070001;
         public static final int textView1=0x7f070002;
         public static final int textView2=0x7f070003;
+        public static final int textView3=0x7f070004;
+        public static final int textView4=0x7f070005;
+        public static final int textView5=0x7f070006;
     }
     public static final class layout {
         public static final int activity_game=0x7f030000;
