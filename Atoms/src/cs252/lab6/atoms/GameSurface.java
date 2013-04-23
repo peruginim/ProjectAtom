@@ -49,9 +49,10 @@ public class GameSurface extends SurfaceView
 	{
 		players = new Player[4];
 		int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
+		players[0] = new Player("me", Color.RED, false);
 		
-		for(int i=0;i<4;i++)
-			players[i] = new Player("Player " + (i + 1), colors[i], false);
+		for(int i=1;i<4;i++)
+			players[i] = new Player("Player " + (i + 1), colors[i], true);
 		
 		grid = new Atom[5][5];
 		
@@ -103,7 +104,9 @@ public class GameSurface extends SurfaceView
 			x = (int)(Math.random() * 5);
 			y = (int)(Math.random() * 5);
 		}
-		while(!grid[x][y].getPlayer().getName().equals("null") || grid[x][y].getPlayer() != players[turn]);
+		while(!grid[x][y].getPlayer().getName().equals("null") && grid[x][y].getPlayer() != players[turn]);
+		
+		explode(x, y);
 	}
 	
 	public void explode(int x, int y)
