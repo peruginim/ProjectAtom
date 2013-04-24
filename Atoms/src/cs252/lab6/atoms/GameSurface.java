@@ -27,8 +27,7 @@ public class GameSurface extends SurfaceView
 	private int turn;
 	private boolean exploding;
 	private boolean gameOver;
-	
-	public static final int TIMER_TICK = 2;
+	private Player nullPlayer;
 	
 	public GameSurface(Context context)
 	{
@@ -49,10 +48,12 @@ public class GameSurface extends SurfaceView
 	{
 		players = new Player[4];
 		int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
+		players[0] = new Player("me", Color.RED, false);
 		
-		for(int i=0;i<4;i++)
-			players[i] = new Player("Player " + (i + 1), colors[i], false);
+		for(int i=1;i<4;i++)
+			players[i] = new Player("Player " + (i + 1), colors[i], true);
 		
+		nullPlayer = new Player("null", Color.GRAY, true);
 		grid = new Atom[5][5];
 		
 		for(int i=0;i<5;i++)
@@ -62,7 +63,7 @@ public class GameSurface extends SurfaceView
 				int rings = 3;
 				if(i == 0 || i == 4) rings--;
 				if(j == 0 || j == 4) rings--;
-				grid[i][j] = new Atom(rings);
+				grid[i][j] = new Atom(nullPlayer, rings);
 			}
 		}
 		
@@ -103,7 +104,9 @@ public class GameSurface extends SurfaceView
 			x = (int)(Math.random() * 5);
 			y = (int)(Math.random() * 5);
 		}
-		while(!grid[x][y].getPlayer().getName().equals("null") || grid[x][y].getPlayer() != players[turn]);
+		while(grid[x][y].getPlayer() != nullPlayer && grid[x][y].getPlayer() != players[turn]);
+		
+		explode(x, y);
 	}
 	
 	public void explode(int x, int y)
@@ -147,7 +150,7 @@ public class GameSurface extends SurfaceView
 		
 		for(int i=0;i<5;i++)
 			for(int j=0;j<5;j++)
-				if(grid[i][j].getPlayer().getName().equals("null") || grid[i][j].getPlayer() == players[turn])
+				if(grid[i][j].getPlayer() == nullPlayer || grid[i][j].getPlayer() == players[turn])
 				{
 					if(players[turn].isBot())
 						botTurn();
@@ -161,7 +164,7 @@ public class GameSurface extends SurfaceView
 	{
 		for(int i=0;i<5;i++)
 			for(int j=0;j<5;j++)
-				if(grid[i][j].getPlayer().getName().equals("null") || grid[i][j].getPlayer() != players[turn])
+				if(grid[i][j].getPlayer() == nullPlayer || grid[i][j].getPlayer() != players[turn])
 					return;
 		
 		gameOver = true;
@@ -172,7 +175,7 @@ public class GameSurface extends SurfaceView
 		int x = (int)(event.getX() / size);
 		int y = (int)((event.getY() - yOffset) / size);
 		
-		if(!gameOver && !exploding && x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer().getName().equals("null") || grid[x][y].getPlayer() == players[turn]))
+		if(!gameOver && !exploding && x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer() == nullPlayer || grid[x][y].getPlayer() == players[turn]))
 			explode(x, y);
 		
 		return false;

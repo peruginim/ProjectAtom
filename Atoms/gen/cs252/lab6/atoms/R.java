@@ -43,7 +43,14 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int player3=0x7f070009;
         public static final int player4=0x7f07000c;
         public static final int textView1=0x7f070002;
+<<<<<<< HEAD
         public static final int textView2=0x7f070011;
+=======
+        public static final int textView2=0x7f070003;
+        public static final int textView3=0x7f070004;
+        public static final int textView4=0x7f070005;
+        public static final int textView5=0x7f070006;
+>>>>>>> 34453737b3dbfd40a31c6115a7e25a078bd0eddc
     }
     public static final class layout {
         public static final int activity_game=0x7f030000;

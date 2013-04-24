@@ -24,7 +24,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="Brandon Vickery\nNiraj Venkat\nSam Dickson\nMike Perugini"
+        android:text="Brandon Vickrey"
         android:textSize="25sp" />
+    
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="Niraj Venkat"
+        android:textSize="25sp" />
+    
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="Sam Dickson"
+        android:textSize="25sp" />
+    
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="Mike Perugini"
+        android:textSize="25sp" />
+    
 
 </LinearLayout>

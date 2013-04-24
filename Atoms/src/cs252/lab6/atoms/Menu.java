@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 public class Menu extends ListActivity{
 
-	String classes[] = {"New Game", "Load Game", "Options", "Instructions", "Exit"};
+	String classes[] = {"New Game", "Instructions", "Options", "Exit"};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -23,9 +23,6 @@ public class Menu extends ListActivity{
 		super.onListItemClick(l, v, position, id);
 		String cheese = classes[position];
 		
-		if(cheese.equals("Load Game")){
-			cheese = "LoadGame";
-		}
 		if(cheese.equals("New Game")){
 			cheese = "Game";
 		}
