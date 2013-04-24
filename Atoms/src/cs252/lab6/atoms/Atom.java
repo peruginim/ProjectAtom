@@ -11,9 +11,9 @@ public class Atom
 	private int[] speeds;
 	private double nuc;
 	
-	public Atom(int rings)
+	public Atom(Player player, int rings)
 	{
-		player = new Player("null", Color.GRAY, true);
+		this.player = player;
 		num = 0;
 		elecs = new double[rings];
 		speeds = new int[rings];
