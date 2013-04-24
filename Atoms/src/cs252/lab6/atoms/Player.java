@@ -6,7 +6,7 @@ public class Player
 {
 	private int player_id;
 	private String name;
-	public int games_played = 0;
+	public int games_played;
 	public int games_won = 0;
 	private int color;
 	private int backColor;

@@ -10,6 +10,11 @@ import android.view.WindowManager;
 
 public class Game extends Activity
 {
+	public static boolean isNetwork = false;
+	public static final String SERVER_PATH = "sslab15.cs.purdue.edu";
+	public static final int SERVER_PORT = 8001;
+	public static Socket s;
+	
 	GameSurface surface;
 	
     protected void onCreate(Bundle savedInstanceState)
@@ -21,6 +26,10 @@ public class Game extends Activity
         
         setContentView(R.layout.activity_game);
         surface = (GameSurface)findViewById(R.id.gameview);
+        if(isNetwork)
+        {
+        	surface.isNetwork = true;
+        }
         
     }
     

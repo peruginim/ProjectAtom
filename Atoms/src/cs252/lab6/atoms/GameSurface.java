@@ -34,6 +34,9 @@ public class GameSurface extends SurfaceView
 	private boolean exploding;
 	private boolean gameOver;
 	private Player nullPlayer;
+	private boolean updated = false;
+	public boolean isNetwork = false;
+	public static String net_move = null;
 	
 	public GameSurface(Context context)
 	{
@@ -57,11 +60,25 @@ public class GameSurface extends SurfaceView
 		int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
 		//players[0] = new Player("me", Color.RED, false);
 		
-		int bot_num = 1;
-		if(players.length < 4)
+		if(isNetwork)
 		{
-			for(int i=(players.length-1);i<4;i++)
-				players[i] = new Player("Bot " + bot_num, colors[i], true);
+			Player loc = players[0];
+			Player rem = players[1];
+			players = null;
+			players = new Player[2];
+			players[0] = loc;
+			players[1] = rem;
+			players[1].setName("Remote Player");
+		}
+		
+		if(!isNetwork)
+		{
+			int bot_num = 1;
+			if(players.length < 4)
+			{
+				for(int i=(players.length-1);i<4;i++)
+					players[i] = new Player("Bot " + bot_num, colors[i], true);
+			}
 		}
 		
 		nullPlayer = new Player("null", Color.GRAY, true);
@@ -171,7 +188,29 @@ public class GameSurface extends SurfaceView
 				if(grid[i][j].getPlayer() == nullPlayer || grid[i][j].getPlayer() == players[turn])
 				{
 					if(players[turn].isBot())
+					{
 						botTurn();
+					}
+					
+					if(isNetwork)
+					{
+						if(turn == 1)
+						{
+								Log.v("!", "GOT " + net_move);
+								if(net_move != null)
+								{
+									int x = Integer.parseInt(net_move.split(" ")[0]);
+									int y = Integer.parseInt(net_move.split(" ")[1]);
+									net_move = null;
+									if(!gameOver && !exploding && x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer() == nullPlayer || grid[x][y].getPlayer() == players[turn]))
+									{
+										explode(x, y);
+									}
+								}
+							
+						}
+					}
+					
 					return;
 				}
 		
@@ -186,16 +225,30 @@ public class GameSurface extends SurfaceView
 					return;
 		
 		gameOver = true;
-		
+		if(!updated)
+		{
+			updated = true;
+			new updateSQL().execute();
+		}
 	}
 	
 	public boolean onTouchEvent(MotionEvent event)
 	{
+		
 		int x = (int)(event.getX() / size);
 		int y = (int)((event.getY() - yOffset) / size);
 		
 		if(!gameOver && !exploding && x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer() == nullPlayer || grid[x][y].getPlayer() == players[turn]))
+		{
+			if(isNetwork)
+			{
+				new postMove().execute(x + " " + y);
+				new fetchMove().execute();
+				
+			}
 			explode(x, y);
+			
+		}
 		
 		return false;
 	}
@@ -304,7 +357,6 @@ public class GameSurface extends SurfaceView
 			else
 			{
 				canvas.drawText(players[turn].getName() + " has won!", this.getWidth() / 2, this.getHeight() - (yOffset / 2), paint);
-				new updateSQL().execute();
 			}
 			paint.setStrokeWidth((float)1.5);
 			
@@ -329,6 +381,99 @@ public class GameSurface extends SurfaceView
 		catch(Exception e) {}
 	}
 	
+	private class fetchMove extends AsyncTask<Void, Integer, Void>
+	{
+		BufferedReader in = null;
+		
+		protected void onPreExecute()
+		{
+			try
+			{
+				in = new BufferedReader(new InputStreamReader(Game.s.getInputStream()));
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		protected Void doInBackground(Void... arg0)
+		{
+			String move = "";
+			try
+			{
+				if(Game.s != null && in != null)
+				{
+					Log.v("!", "TRYING READ");
+					while((move = in.readLine()) != null)
+					{
+						Log.v("!", "READ " + move);
+						GameSurface.net_move = move;
+						break;
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			if(isNetwork)
+			{
+				if(turn == 1)
+				{
+						Log.v("!", "GOT " + net_move);
+						if(net_move != null)
+						{
+							int x = Integer.parseInt(net_move.split(" ")[0]);
+							int y = Integer.parseInt(net_move.split(" ")[1]);
+							net_move = null;
+							if(!gameOver && !exploding && x >= 0 && x < 5 && y >= 0 && y < 5 && (grid[x][y].getPlayer() == nullPlayer || grid[x][y].getPlayer() == players[turn]))
+							{
+								explode(x, y);
+							}
+						}
+					
+				}
+			}
+			
+			return null;
+		}
+
+	}
+	
+	private class postMove extends AsyncTask<String, Integer, Void>
+	{
+		PrintWriter out = null;
+		
+		protected void onPreExecute()
+		{
+			try
+			{
+				out = new PrintWriter(Game.s.getOutputStream());
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		protected Void doInBackground(String... arg0) 
+		{
+	        try
+	        {
+	        	Log.v("!", arg0[0] + " ");
+	        	out.println(arg0[0]);
+	        	out.flush();
+	        }
+	        catch(Exception e)
+	        {
+	        	e.printStackTrace();
+	        }
+	        return null;
+	    }
+	}
+	
 	private class updateSQL extends AsyncTask<Void, Integer, Void>
 	{
 
@@ -341,21 +486,24 @@ public class GameSurface extends SurfaceView
 	        	
 	        	for(Player p : players)
 	        	{
-	        		p.games_played++;
-	        		String query = "";
-	        		
-	        		if(p.equals(players[turn]))
+	        		if(!p.isBot())
 	        		{
-	        			p.games_won++;
-	        			query = "UPDATE players SET games_played=" + p.games_played + ", games_won=" + p.games_won + " WHERE player_id=" + p.getPlayerID();
-	        			out.println(query);
-	        			out.flush();
-	        		}
-	        		else
-	        		{
-	        			query = "UPDATE players SET games_played=" + p.games_played + " WHERE player_id=" + p.getPlayerID();
-	        			out.println(query);
-	        			out.flush();
+		        		p.games_played++;
+		        		String query = "";
+		        		
+		        		if(p.equals(players[turn]))
+		        		{
+		        			p.games_won++;
+		        			query = "UPDATE players SET games_played=" + p.games_played + ", games_won=" + p.games_won + " WHERE player_id=" + p.getPlayerID();
+		        			out.println(query);
+		        			out.flush();
+		        		}
+		        		else
+		        		{
+		        			query = "UPDATE players SET games_played=" + p.games_played + " WHERE player_id=" + p.getPlayerID();
+		        			out.println(query);
+		        			out.flush();
+		        		}
 	        		}
 	        	}
 	        	
