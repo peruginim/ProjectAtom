@@ -6,8 +6,8 @@ public class Player
 {
 	private int player_id;
 	private String name;
-	private int games_played;
-	private int games_won;
+	public int games_played = 0;
+	public int games_won = 0;
 	private int color;
 	private int backColor;
 	private boolean bot;
@@ -48,7 +48,6 @@ public class Player
 	public int getColor() { return color; }
 	public int getBackColor() { return backColor; }
 	public int getGamesPlayed() { return games_played; }
-	public int getGamesWon() { return games_won; }
 	public int getPlayerID() { return player_id; }
 	public boolean isBot() { return bot; }
 	
@@ -57,8 +56,17 @@ public class Player
 	public void setBackColor(int color){ this.backColor = color; }
 	public void setBot(boolean bot){ this.bot = bot; }
 	public void setID(int player_id){ this.player_id = player_id; }
-	public void incrementGamesPlayed(){ games_played++; }
-	public void incrementGamesWon(){ games_won++; }
+	
+	public String toString()
+	{
+		return "ID: " + player_id + ", Name: " + name + ", Bot: " + bot + ", Color: " + color + ", Back Color: " + backColor + ", Games Won: " + games_won + ", Games Played: " + games_played;
+	}
+	
+	public boolean equals(Object o)
+	{
+		Player other = (Player)o;
+		return this.player_id == other.getPlayerID();
+	}
 	
 	
 }

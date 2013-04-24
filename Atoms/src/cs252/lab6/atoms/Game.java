@@ -1,7 +1,10 @@
 package cs252.lab6.atoms;
 
+import java.net.*;
+import java.io.*;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -18,6 +21,7 @@ public class Game extends Activity
         
         setContentView(R.layout.activity_game);
         surface = (GameSurface)findViewById(R.id.gameview);
+        
     }
     
     protected void onResume()

@@ -1,11 +1,17 @@
 package cs252.lab6.atoms;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,7 +25,7 @@ public class GameSurface extends SurfaceView
 	private SurfaceHolder holder;
 	private int size;
 	private int yOffset;
-	private Player[] players;
+	public static Player[] players;
 	private Atom[][] grid;
 	private Point[][] strays;
 	private int straysPos;
@@ -46,14 +52,20 @@ public class GameSurface extends SurfaceView
 	
 	public void onResume()
 	{
-		players = new Player[4];
-		int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
-		players[0] = new Player("me", Color.RED, false);
+		//players = new Player[4];
 		
-		for(int i=1;i<4;i++)
-			players[i] = new Player("Player " + (i + 1), colors[i], true);
+		int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
+		//players[0] = new Player("me", Color.RED, false);
+		
+		int bot_num = 1;
+		if(players.length < 4)
+		{
+			for(int i=(players.length-1);i<4;i++)
+				players[i] = new Player("Bot " + bot_num, colors[i], true);
+		}
 		
 		nullPlayer = new Player("null", Color.GRAY, true);
+		
 		grid = new Atom[5][5];
 		
 		for(int i=0;i<5;i++)
@@ -96,6 +108,12 @@ public class GameSurface extends SurfaceView
 	
 	public void botTurn()
 	{
+		try
+		{
+			Thread.sleep(700); //Gives the appearance of the game "Thinking"...
+		}
+		catch(Exception e){}
+		
 		int x;
 		int y;
 		
@@ -168,6 +186,7 @@ public class GameSurface extends SurfaceView
 					return;
 		
 		gameOver = true;
+		
 	}
 	
 	public boolean onTouchEvent(MotionEvent event)
@@ -279,9 +298,14 @@ public class GameSurface extends SurfaceView
 			paint.setTextSize(size / 3);
 			paint.setColor(players[turn].getColor());
 			if(!gameOver)
+			{
 				canvas.drawText(players[turn].getName() + "'s turn", this.getWidth() / 2, this.getHeight() - (yOffset / 2), paint);
+			}
 			else
+			{
 				canvas.drawText(players[turn].getName() + " has won!", this.getWidth() / 2, this.getHeight() - (yOffset / 2), paint);
+				new updateSQL().execute();
+			}
 			paint.setStrokeWidth((float)1.5);
 			
 			for(int i=0;i<5;i++)
@@ -303,5 +327,50 @@ public class GameSurface extends SurfaceView
 			}
 		}
 		catch(Exception e) {}
+	}
+	
+	private class updateSQL extends AsyncTask<Void, Integer, Void>
+	{
+
+		protected Void doInBackground(Void... arg0) 
+		{
+	        try
+	        {
+	        	Socket s = new Socket(Splash.SQL_PATH, Splash.SQL_PORT);
+	        	PrintWriter out = new PrintWriter(s.getOutputStream());
+	        	
+	        	for(Player p : players)
+	        	{
+	        		p.games_played++;
+	        		String query = "";
+	        		
+	        		if(p.equals(players[turn]))
+	        		{
+	        			p.games_won++;
+	        			query = "UPDATE players SET games_played=" + p.games_played + ", games_won=" + p.games_won + " WHERE player_id=" + p.getPlayerID();
+	        			out.println(query);
+	        			out.flush();
+	        		}
+	        		else
+	        		{
+	        			query = "UPDATE players SET games_played=" + p.games_played + " WHERE player_id=" + p.getPlayerID();
+	        			out.println(query);
+	        			out.flush();
+	        		}
+	        	}
+	        	
+	        	out.println("TERM");
+	        	out.flush();
+	        	out.close();
+	        	s.close();
+	        	
+	        }
+	        catch(Exception e)
+	        {
+	        	e.printStackTrace();
+	        }
+			return null;
+		}
+		
 	}
 }
