@@ -31,11 +31,18 @@ public class Settings extends Activity implements OnClickListener {
 		
 		EditText player4 = (EditText) findViewById(R.id.player4);
 		player4.setOnClickListener(this);
+		
+		View back = findViewById(R.id.back_button);
+		back.setOnClickListener(this);
 	}
 
 	@Override
-	public void onClick(View arg0) {
+	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+		switch(v.getId()){
+		case R.id.back_button:
+			finish();
+			break;
+		}
 	}
 }
