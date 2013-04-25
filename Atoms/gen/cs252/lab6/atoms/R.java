@@ -29,45 +29,48 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ic_launcher_web=0x7f020001;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f080002;
-        public static final int back_button=0x7f080014;
-        public static final int checkBox1=0x7f080005;
-        public static final int checkBox2=0x7f080006;
-        public static final int checkBox3=0x7f080009;
-        public static final int checkBox4=0x7f08000a;
-        public static final int checkBox5=0x7f08000d;
-        public static final int checkBox6=0x7f08000e;
-        public static final int checkBox7=0x7f080011;
-        public static final int checkBox8=0x7f080012;
+        public static final int LinearLayout1=0x7f080004;
+        public static final int back_button=0x7f080015;
+        public static final int button1=0x7f080002;
+        public static final int checkBox1=0x7f080006;
+        public static final int checkBox2=0x7f080007;
+        public static final int checkBox3=0x7f08000a;
+        public static final int checkBox4=0x7f08000b;
+        public static final int checkBox5=0x7f08000e;
+        public static final int checkBox6=0x7f08000f;
+        public static final int checkBox7=0x7f080012;
+        public static final int checkBox8=0x7f080013;
         public static final int gameview=0x7f080000;
-        public static final int imageView1=0x7f080015;
-        public static final int listview=0x7f080001;
-        public static final int player1=0x7f080004;
-        public static final int player2=0x7f080008;
-        public static final int player3=0x7f08000c;
-        public static final int player4=0x7f080010;
-        public static final int spinner1=0x7f080007;
-        public static final int spinner2=0x7f08000b;
-        public static final int spinner3=0x7f08000f;
-        public static final int spinner4=0x7f080013;
-        public static final int textView1=0x7f080003;
-        public static final int textView2=0x7f080016;
-        public static final int textView3=0x7f080017;
-        public static final int textView4=0x7f080018;
-        public static final int textView5=0x7f080019;
+        public static final int imageView1=0x7f080016;
+        public static final int listview=0x7f080003;
+        public static final int player1=0x7f080005;
+        public static final int player2=0x7f080009;
+        public static final int player3=0x7f08000d;
+        public static final int player4=0x7f080011;
+        public static final int spinner1=0x7f080008;
+        public static final int spinner2=0x7f08000c;
+        public static final int spinner3=0x7f080010;
+        public static final int spinner4=0x7f080014;
+        public static final int textView1=0x7f080001;
+        public static final int textView2=0x7f080017;
+        public static final int textView3=0x7f080018;
+        public static final int textView4=0x7f080019;
+        public static final int textView5=0x7f08001a;
     }
     public static final class layout {
         public static final int activity_game=0x7f030000;
-        public static final int match=0x7f030001;
-        public static final int settings=0x7f030002;
-        public static final int splash=0x7f030003;
+        public static final int instructions=0x7f030001;
+        public static final int match=0x7f030002;
+        public static final int settings=0x7f030003;
+        public static final int splash=0x7f030004;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
-        public static final int color_prompt=0x7f050004;
+        public static final int color_prompt=0x7f050005;
         public static final int dummy_button=0x7f050001;
         public static final int dummy_content=0x7f050002;
-        public static final int players_header=0x7f050003;
+        public static final int instructions=0x7f050003;
+        public static final int players_header=0x7f050004;
     }
     public static final class style {
         /** 
