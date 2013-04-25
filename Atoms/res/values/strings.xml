@@ -4,7 +4,7 @@
     <string name="app_name">Atoms</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="instructions">Atoms is a Strategy game with the goal being to flood the entire screen (turn every atom) to your color atom. Each atom has a certain number of rings corrisponding to the amount of electrons it can hold. An atom with one circle and one ring will hold one electron, an atom with two circles and two rings can hold two electons, etc... Once a player selects a grey atom, it will turn their color and an electron will be added to the ring(s). You can make an atom explode by selecting an atom that has an electron on each of its outer rings. This explosion will cause a chain reaction, expanding your color to multiple atoms.  </string>
+    <string name="instructions">Atoms is a Strategy game with the goal being to flood the entire screen (turn every atom) to your color atom. Each atom has a certain number of rings corrisponding to the amount of electrons it can hold. An atom with one circle and one ring will hold one electron, an atom with two circles and two rings can hold two electons, etc... \n\nOnce a player selects a grey atom, it will turn their color and an electron will be added to the ring(s). You can make an atom explode by selecting an atom that has an electron on each of its outer rings. This explosion will cause a chain reaction, expanding your color to multiple atoms.  </string>
     <string name="players_header">Players</string>
     <string name="color_prompt">Choose color</string>
 
