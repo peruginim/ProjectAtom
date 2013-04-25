@@ -40,6 +40,7 @@
             android:id="@+id/checkBox2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Playing" />
 
     </LinearLayout>
@@ -59,12 +60,14 @@
             android:id="@+id/checkBox3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Bot" />
 
         <CheckBox
             android:id="@+id/checkBox4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Playing" />
 
     </LinearLayout>
@@ -84,12 +87,14 @@
             android:id="@+id/checkBox5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Bot" />
 
         <CheckBox
             android:id="@+id/checkBox6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Playing" />
 
     </LinearLayout>
@@ -109,12 +114,14 @@
             android:id="@+id/checkBox7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Bot" />
 
         <CheckBox
             android:id="@+id/checkBox8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Playing" />
 
     </LinearLayout>
