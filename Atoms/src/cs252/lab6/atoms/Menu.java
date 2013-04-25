@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 public class Menu extends ListActivity{
 
-	String classes[] = {"Local Game", "Network Game", "High Scores", "Instructions", "Options", "Exit"};
+	String classes[] = {"Local Game", "Network Game", "High Scores", "Instructions", "Settings", "Exit"};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -38,10 +38,7 @@ public class Menu extends ListActivity{
 		if(cheese.equals("Exit")){
 			android.os.Process.killProcess(android.os.Process.myPid());
 		}
-		if(cheese.equals("Options"))
-		{
-			cheese = "Settings";
-		}
+
 		
 		try {
 			Class room = Class.forName("cs252.lab6.atoms." + cheese);
