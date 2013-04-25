@@ -9,6 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.89"
+        android:maxLines = "64"
+		android:scrollbars = "vertical"
         android:text="@string/instructions"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
