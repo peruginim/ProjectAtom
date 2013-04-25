@@ -10,7 +10,7 @@ public class Player
 	public int games_won = 0;
 	private int color;
 	private int backColor;
-	private boolean bot;
+	public boolean bot;
 	
 	public Player(String name, int color, boolean bot)
 	{
@@ -39,9 +39,21 @@ public class Player
 			this.bot = false;
 		}
 		this.color = color;
-		this.backColor = bg_color;
+		int red = Color.red(color);
+		int green = Color.green(color);
+		int blue = Color.blue(color);
+		this.backColor = Color.rgb(red - 50 > 0 ? red - 50 : 0, green - 50 > 0 ? green - 50 : 0, blue - 50 > 0 ? blue - 50 : 0);
 		this.games_played = games_played;
 		this.games_won = games_won;
+	}
+	
+	public void setColor(int color)
+	{
+		this.color = color;
+		int red = Color.red(color);
+		int green = Color.green(color);
+		int blue = Color.blue(color);
+		this.backColor = Color.rgb(red - 50 > 0 ? red - 50 : 0, green - 50 > 0 ? green - 50 : 0, blue - 50 > 0 ? blue - 50 : 0);
 	}
 	
 	public String getName() { return name; }
@@ -52,8 +64,6 @@ public class Player
 	public boolean isBot() { return bot; }
 	
 	public void setName(String name){ this.name = name; }
-	public void setColor(int color){ this.color = color; }
-	public void setBackColor(int color){ this.backColor = color; }
 	public void setBot(boolean bot){ this.bot = bot; }
 	public void setID(int player_id){ this.player_id = player_id; }
 	

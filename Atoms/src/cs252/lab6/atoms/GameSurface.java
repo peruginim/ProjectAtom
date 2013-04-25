@@ -69,9 +69,11 @@ public class GameSurface extends SurfaceView
 			players[0] = loc;
 			players[1] = rem;
 			players[0].setName("Local Player");
+			players[0].bot = false;
 			players[0].setColor(Color.GREEN);
 			players[1].setName("Remote Player");
 			players[1].setColor(Color.RED);
+			players[1].bot = false;
 			
 			//new postMove().execute("P_NUM");
 			//new fetchMove().execute();
@@ -88,7 +90,7 @@ public class GameSurface extends SurfaceView
 
 		}
 		
-		if(!isNetwork)
+		/*if(!isNetwork)
 		{
 			int bot_num = 1;
 			if(players.length < 4)
@@ -96,7 +98,7 @@ public class GameSurface extends SurfaceView
 				for(int i=(players.length-1);i<4;i++)
 					players[i] = new Player("Bot " + bot_num, colors[i], true);
 			}
-		}
+		}*/
 		
 		nullPlayer = new Player("null", Color.GRAY, true);
 		

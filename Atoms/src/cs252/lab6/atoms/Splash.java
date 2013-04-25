@@ -91,13 +91,12 @@ public class Splash extends Activity
 	        		else
 	        		{
 		        		String player_data[] = player.split(" ");
-		        		if(Integer.parseInt(player_data[2]) == 0) //Not a bot.
-		        		{
-			        			Player tmp = new Player(Integer.parseInt(player_data[0]), player_data[1], 0, colors[i], Integer.parseInt(player_data[4]), Integer.parseInt(player_data[5]), Integer.parseInt(player_data[6]));
+		        		
+			        			Player tmp = new Player(Integer.parseInt(player_data[0]), player_data[1], Integer.parseInt(player_data[2]), colors[i], Integer.parseInt(player_data[4]), Integer.parseInt(player_data[5]), Integer.parseInt(player_data[6]));
 			        			Log.v("READ SQL", tmp.toString());
 			        			players[i] = tmp;
 			        			i++;
-		        		}
+		        		
 	        		}
 	        	}
 	        	
