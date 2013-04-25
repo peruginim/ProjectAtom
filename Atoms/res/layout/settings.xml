@@ -11,7 +11,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Playing"
+        android:text="Players"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -38,7 +38,7 @@
             android:id="@+id/checkBox2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Player" />
+            android:text="Playing" />
 
     </LinearLayout>
 
@@ -63,7 +63,7 @@
             android:id="@+id/checkBox4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Player" />
+            android:text="Playing" />
 
     </LinearLayout>
 
@@ -88,7 +88,7 @@
             android:id="@+id/checkBox6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Player" />
+            android:text="Playing" />
 
     </LinearLayout>
 
@@ -113,7 +113,7 @@
             android:id="@+id/checkBox8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Player" />
+            android:text="Playing" />
 
     </LinearLayout>
 
