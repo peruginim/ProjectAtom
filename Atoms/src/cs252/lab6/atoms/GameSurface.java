@@ -68,7 +68,24 @@ public class GameSurface extends SurfaceView
 			players = new Player[2];
 			players[0] = loc;
 			players[1] = rem;
+			players[0].setName("Local Player");
+			players[0].setColor(Color.GREEN);
 			players[1].setName("Remote Player");
+			players[1].setColor(Color.RED);
+			
+			//new postMove().execute("P_NUM");
+			//new fetchMove().execute();
+			
+			//if(net_move != null)
+			//{
+				//Game.player = Integer.parseInt(net_move);
+			//}
+			Log.v("!", Game.player + "");
+			if(Game.player == 2)
+			{
+				turn = 1;
+			}
+
 		}
 		
 		if(!isNetwork)
@@ -99,13 +116,20 @@ public class GameSurface extends SurfaceView
 		strays = new Point[1024][];
 		straysPos = 0;
 		numStrays = 0;
-		turn = 0;
-		exploding = false;
+		if(!isNetwork)
+		{
+			turn = 0;
+		}
+			exploding = false;
 		gameOver = false;
 		holder = getHolder();
 		thread = new GameThread(this, holder);
 		thread.setRunning(true);
 		thread.start();
+		if(Game.player == 2)
+		{
+			new fetchMove().execute();
+		}
 	}
 	
 	public void onPause()
@@ -234,6 +258,10 @@ public class GameSurface extends SurfaceView
 	
 	public boolean onTouchEvent(MotionEvent event)
 	{
+		if(isNetwork && turn == 1)
+		{
+			return false;
+		}
 		
 		int x = (int)(event.getX() / size);
 		int y = (int)((event.getY() - yOffset) / size);

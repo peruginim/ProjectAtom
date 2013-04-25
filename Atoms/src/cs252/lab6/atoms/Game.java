@@ -14,6 +14,8 @@ public class Game extends Activity
 	public static final String SERVER_PATH = "sslab15.cs.purdue.edu";
 	public static final int SERVER_PORT = 8001;
 	public static Socket s;
+	public static int player = 0;
+
 	
 	GameSurface surface;
 	
