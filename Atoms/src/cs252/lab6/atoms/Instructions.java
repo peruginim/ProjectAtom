@@ -7,11 +7,11 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 
 public class Instructions extends Activity implements OnClickListener {
-	int content = R.layout.settings;
+	int content = R.layout.instructions;
 	
 	public void onCreate(Bundle savedInstanceState) 
 	{
-super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
 		
 		setContentView(content);
 		
